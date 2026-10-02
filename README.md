@@ -1,6 +1,6 @@
 # Greptile Score
 
-A small Chrome extension that adds two things to every row of a GitHub pull request list
+A small Chrome and Firefox extension that adds two things to every row of a GitHub pull request list
 (e.g. `github.com/<owner>/<repo>/pulls`):
 
 - the **[Greptile](https://greptile.com) confidence score** (`X/5`), colour-coded and linked to the review comment
@@ -21,6 +21,8 @@ No build step, no dependencies. Plain Manifest V3 JavaScript.
 
 ## Install
 
+### Chrome (and other Chromium browsers)
+
 1. Clone or download this repo.
 2. Open `chrome://extensions` and turn on **Developer mode**.
 3. Click **Load unpacked** and select this folder.
@@ -28,13 +30,29 @@ No build step, no dependencies. Plain Manifest V3 JavaScript.
 
 Works in any Chromium browser that supports MV3 (Chrome, Edge, Brave, Arc).
 
+### Firefox (140+)
+
+1. Clone or download this repo.
+2. Open `about:debugging#/runtime/this-firefox` and click **Load Temporary Add-on…**.
+3. Select `manifest.json` in this folder.
+4. Open any PR list. Click **Set GitHub token** on a row (or `about:addons` → Greptile Score → *Preferences*) and configure the extension (below).
+
+Temporary add-ons are removed when Firefox restarts. To keep it installed, build a package with
+[`web-ext`](https://github.com/mozilla/web-ext) (`npx web-ext build`) and sign it through
+[AMO](https://addons.mozilla.org/developers/) (an unlisted listing works), or use Firefox Developer Edition/Nightly with
+`xpinstall.signatures.required` set to `false`. For development, `npx web-ext run` launches Firefox with the extension
+loaded and reloads it whenever you change a file.
+
+Firefox lets you turn off an extension's site access. If you do, clicking **Save** on the options page asks for
+access to `github.com` and `api.github.com` again.
+
 ## Configuration
 
 Open the options page and set:
 
 ### GitHub token (required)
 
-The extension calls `api.github.com` from its background service worker. The token is stored in
+The extension calls `api.github.com` from its background script (a service worker in Chrome, an event page in Firefox). The token is stored in
 `chrome.storage.local` on your machine and is never exposed to the page or sent anywhere except GitHub.
 
 Easiest option, if you use the GitHub CLI:
@@ -123,7 +141,7 @@ rendering widgets.
 ## Project layout
 
 ```
-manifest.json   MV3 manifest (host permission: api.github.com; content script: github.com)
+manifest.json   MV3 manifest for Chrome + Firefox (service_worker for Chrome, background scripts + gecko id for Firefox)
 background.js   service worker: GraphQL/REST calls, score parsing, merge + polling
 content.js      finds PR rows, renders badge/button, handles confirm + merge UI
 content.css     badge and button styling
@@ -132,5 +150,5 @@ options.html/js token, merge method, Greptile author pattern
 
 ## Privacy
 
-Your token lives in `chrome.storage.local`. The only network traffic is to `api.github.com`. There is no
+Your token lives in the extension's local storage (`chrome.storage.local`). The only network traffic is to `api.github.com`. There is no
 analytics or third-party service.
