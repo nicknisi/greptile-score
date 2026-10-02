@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "description": "Shows the Greptile confidence score (X/5) and a merge / merge stack button on GitHub PR lists.",
   "permissions": ["storage"],
-  "host_permissions": ["https://api.github.com/*"],
-  "background": { "service_worker": "background.js" },
+  "host_permissions": ["https://api.github.com/*", "https://github.com/*"],
+  "background": { "service_worker": "background.js", "scripts": ["background.js"] },
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
@@ -13,5 +13,12 @@
       "css": ["content.css"]
     }
   ],
-  "options_ui": { "page": "options.html", "open_in_tab": true }
+  "options_ui": { "page": "options.html", "open_in_tab": true },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "greptile-score@nicknisi.github.io",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  }
 }
