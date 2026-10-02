@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Greptile Score</title>
+<style>
+  body { font: 14px system-ui; max-width: 560px; margin: 40px auto; }
+  label { display: block; margin: 16px 0 4px; font-weight: 600; }
+  input, select { width: 100%; padding: 6px; box-sizing: border-box; }
+  small { color: #666; }
+  button { margin-top: 16px; padding: 6px 14px; }
+</style>
+<h2>Greptile Score</h2>
+<label for="token">GitHub token</label>
+<input id="token" type="password" placeholder="ghp_… or github_pat_…" autocomplete="off">
+<small>Needs read + write on Pull requests (and Contents for merging). Classic PAT with <code>repo</code> scope works; for SSO orgs, authorize it. Quick: <code>gh auth token</code>.</small>
+<label for="method">Merge method</label>
+<select id="method"><option>squash</option><option>merge</option><option>rebase</option></select>
+<label for="bot">Greptile author pattern (regex)</label>
+<input id="bot" placeholder="greptile">
+<button id="save">Save</button> <span id="ok"></span>
+<script src="options.js"></script>

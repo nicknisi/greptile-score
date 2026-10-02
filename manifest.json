@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Greptile Score",
+  "version": "0.1.0",
+  "description": "Shows the Greptile confidence score (X/5) and a merge / merge stack button on GitHub PR lists.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://api.github.com/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  "options_ui": { "page": "options.html", "open_in_tab": true }
+}
